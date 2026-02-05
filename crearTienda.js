@@ -1,5 +1,6 @@
 // variable global para el json de productos parseados
 let inventario = [];
+let totalCuenta = 0; // Variable para sumar el precio total de los productos añadidos al carrito
 
 function init() {
     console.log("Iniciando tienda");
@@ -68,7 +69,7 @@ function crearArticulo(infoProducto) {
 
     // Luego creamos otro parrafo con la descripcion del producto
     let desc = document.createElement("p");
-    desc.style.fontSize = "0.9em";
+    desc.style.fontSize = "15px";
     desc.textContent = infoProducto.descripcion;
     articulo.appendChild(desc);
 
@@ -91,9 +92,10 @@ function crearArticulo(infoProducto) {
     boton.classList.add("btn-comprar");
     boton.textContent = "AÑADIR AL CARRITO";
     
-    // Creo el evento click del boton, que al hacer click muestra un alert para que te indique que has añadido el producto al carrito
+    // Creo el evento click del boton, que al hacer click muestra un alert para añadir el producto al carrito.
     boton.addEventListener("click", function() {
         alert("Has añadido " + infoProducto.nombre + " al carrito.");
+        actualizarTicket(infoProducto);
     });
     
     articulo.appendChild(boton);
@@ -166,4 +168,26 @@ function crearSelectorColores(colores) {
     //añadimos el div de los circulos al contenedor del selector de colores, y devolvemos todo.
     contenedor.appendChild(divColores);
     return contenedor;
+}
+
+
+// Función para añadir productos al ticket de compra.
+function actualizarTicket(producto) {
+    let lista = document.getElementById("lista-compra");
+    
+    //Creamos el producto comprado como un nuevo elemento de la lista de la compra
+    let productoComprado = document.createElement("li");
+    
+    // Le ponemos como contenido el nombre del producto y su precio.
+    productoComprado.textContent = producto.nombre + " ... " + producto.precioBase + "€";
+    
+    // Lo añadimos a la lista de la compra
+    lista.appendChild(productoComprado);
+
+    // Actualizamos el total de la cuenta sumando el precio del producto comprado al total anterior.
+    totalCuenta = totalCuenta + producto.precioBase;
+    
+    // Creamos el elemento del total de la cuenta
+    let importeTotal = document.getElementById("total-carrito");
+    importeTotal.textContent = "Total: " + totalCuenta + "€";
 }
